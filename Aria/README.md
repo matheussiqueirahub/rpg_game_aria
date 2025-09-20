@@ -1,62 +1,44 @@
-Aria — Programa de Personalização de Personagens (Desktop)
+Aria — Guia rápido (Desktop)
 
-Resumo
-- Nome do jogo: Aria
-- Plataforma: Desktop (Windows/macOS/Linux via Python + Tkinter)
-- Armazenamento: SQLite local (arquivo `aria.db`)
-- Segurança: Hash de senha com PBKDF2 (SHA-256 + salt + iterações)
-- UI: Tkinter (login, registro e personalização de personagem)
+O Aria é um app de desktop para criar sua conta, fazer login e personalizar um personagem (atributos de 1–10 e aparência de pele, cabelo e olhos). Tudo é salvo localmente no seu perfil, com segurança.
 
-Funcionalidades
-- Registro e login com validações e mensagens de erro claras.
-- Senhas armazenadas de forma segura (PBKDF2; sem armazenar senhas em texto).
-- Personalização do personagem: nome, força, inteligência, agilidade, cor da pele, cabelo (cor e estilo) e olhos.
-- Escalas 1–10 para atributos numéricos.
-- Salvamento/edição persistente por usuário.
-- Pré-visualização do personagem via Canvas (face/cabelo/olhos/pele) com nome exibido.
-- Ações rápidas: Resetar e Aleatorizar.
-- Tema claro/escuro com toggle no topo.
+Veja em 10 segundos
+- ![Demo](../docs/demo.gif)
 
-Requisitos
-- Python 3.9+ (Tkinter incluído por padrão)
-- Windows: recomendado executar em venv
+Telas principais
+- Login: ![Login](../docs/preview-login.png)
+- Cadastro: ![Cadastro](../docs/preview-register.png)
+- Personalização: ![Personalização](../docs/preview-customize.png)
 
-Instalação e Execução
-1) (Opcional) Criar e ativar venv
-   - Windows PowerShell:
-     - `python -m venv .venv`
-     - `./.venv/Scripts/Activate.ps1`
-2) Instalar dependências (não há dependências externas obrigatórias)
-3) Rodar o app
-   - `python -m Aria.main`
+Como executar
+- Requisitos: Python 3.9+ (Tkinter já incluso)
+- Rodar: `python -m Aria.main`
 
-Geração de Executável (Windows)
-- Requer: `pip install pyinstaller`
-- Comando:
-  - `pyinstaller --onefile --noconsole --name Aria --icon Aria/assets/aria.ico Aria/main.py`
-- O executável será gerado em `dist/Aria.exe`.
+Destaques
+- Login e cadastro com validações claras e mensagens objetivas.
+- Senhas com hash PBKDF2 + salt (nunca em texto puro).
+- Lockout automático após 5 falhas (desbloqueia em 15 min).
+- Customização: nome, força, inteligência, agilidade, pele, cabelo (cor/estilo) e olhos.
+- Preview em Canvas com nome atualizado em tempo real.
+- Tema claro/escuro, tooltips, toasts e atalhos (Ctrl+S, Enter, Esc).
 
-Estrutura
-- `Aria/main.py` — ponto de entrada da aplicação (janela Tk e navegação entre telas)
-- `Aria/database.py` — criação e acesso ao banco SQLite
-- `Aria/security.py` — hash/validação de senhas (PBKDF2)
-- `Aria/ui/login_frame.py` — tela de login
-- `Aria/ui/register_frame.py` — tela de registro
-- `Aria/ui/character_frame.py` — tela de personalização do personagem
-- `Aria/assets/` — ícone e futuros assets
+Banco de dados
+- SQLite local em `Aria/aria.db` (backup: basta copiar o arquivo).
+- Tabelas:
+  - `users`: username único, hash de senha, tentativas e bloqueio.
+  - `characters`: ficha 1–1 por usuário.
 
-Notas de Segurança
-- PBKDF2 com 200.000 iterações e salt aleatório de 16 bytes.
-- Uso de consultas parametrizadas no SQLite para evitar injeção.
-- Lockout: após 5 tentativas falhas, bloqueio de 15 min.
-- Política de senha: mínimo de 8 caracteres, com maiúscula, minúscula e número.
+Arquivos úteis
+- `Aria/main.py`: janela principal, navegação e tema
+- `Aria/database.py`: criação do SQLite, consultas e migração leve
+- `Aria/security.py`: PBKDF2 (200k iterações + salt por senha)
+- `Aria/ui/*`: telas (login, cadastro, personalização), tema, toast e tooltip
 
-Tema e Paleta
-- Paleta inspirada no projeto `paleta_de_cores_aria` (primária, secundária e acento).
-- Toggle “Modo Escuro/Modo Claro” disponível na barra superior.
-
-Backup e Migração
-- O banco está em `Aria/aria.db`. Faça backup desse arquivo para salvar usuários e personagens.
+Empacotamento (Windows)
+- Executável: `pwsh Aria/build.ps1 -NoConsole` → `dist/Aria.exe`
+- ZIP completo: `pwsh Aria/package.ps1`
+- ZIP leve (<10 MB): `pwsh Aria/package-lite.ps1`
 
 Licença
-- Uso privado do cliente CB Games.
+- MIT (veja `../LICENSE`).
+

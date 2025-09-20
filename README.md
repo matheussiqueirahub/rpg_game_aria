@@ -1,71 +1,65 @@
-RPG Game Aria (Desktop)
+Aria — Crie e personalize seu personagem no desktop
 
-Resumo
-- Plataforma: Desktop (Python 3 + Tkinter)
-- Armazenamento: SQLite local (arquivo `Aria/aria.db`)
-- Segurança: PBKDF2 (SHA‑256 + salt + 200k iterações), bloqueio por tentativas
-- UI: Telas de Login, Cadastro e Personalização com tema claro/escuro
+O Aria é um app de desktop simples e focado que permite criar uma conta, fazer login e personalizar o seu personagem com atributos (1–10) e aparência (pele, cabelo, olhos). Tudo fica salvo no seu perfil, localmente, de forma segura. É leve, roda offline e está pronto para ser enviado como executável.
 
-Objetivo
-O Aria permite que cada usuário crie uma conta, faça login e personalize seu personagem (atributos 1–10 e aparência), salvando tudo no perfil. O app é leve, 100% offline e pronto para empacotamento em executável.
+Por dentro do Aria em 12 segundos
+- ![Demo](docs/demo.gif)
 
-Funcionalidades
-- Contas de usuário com login e senha (cadastro, autenticação e bloqueio após tentativas).
-- Senhas armazenadas com hash PBKDF2 + salt (sem plaintext).
-- Personalização do personagem: nome, força, inteligência, agilidade, pele, cabelo (cor/estilo) e olhos.
-- Preview no Canvas com nome, cabelo/olhos/pele.
-- Botões de ação: Salvar, Resetar e Aleatorizar.
-- Tema claro/escuro com toggle na barra superior.
-- Atalhos: Ctrl+S (salvar), Esc (sair/voltar/limpar), Enter (submeter).
+Principais telas
+- Login: ![Login](docs/preview-login.png)
+- Cadastro: ![Cadastro](docs/preview-register.png)
+- Personalização: ![Personalização](docs/preview-customize.png)
 
-Arquitetura
-- `Aria/main.py`: ponto de entrada, controle de janelas e tema.
-- `Aria/database.py`: criação/migração leve do SQLite e operações de dados seguras.
-- `Aria/security.py`: hashing/verificação de senhas (PBKDF2 + salt).
-- `Aria/ui/*`: telas de login, cadastro e personalização, além de tema, toast e tooltip.
-- `Aria/assets/`: ícone opcional `aria.ico` para o executável.
+Destaques
+- Login e cadastro com validações claras e mensagens objetivas.
+- Senhas com hash PBKDF2 + salt (nunca armazenadas em texto).
+- Lockout automático após 5 falhas (desbloqueio em 15 min).
+- Customização completa: nome, força, inteligência, agilidade, pele, cabelo (cor/estilo) e olhos.
+- Preview em Canvas, com nome atualizado em tempo real.
+- Tema claro/escuro, tooltips, toasts e atalhos (Ctrl+S, Enter, Esc).
 
-Instalação
-1) Requisitos: Python 3.9+.
-2) (Opcional) Ambiente virtual:
-   - Windows PowerShell
-     - `python -m venv .venv`
-     - `./.venv/Scripts/Activate.ps1`
-3) Dependências: não há dependências de runtime. Para empacotar, instale `pyinstaller` (dev).
+Baixar o executável (Windows)
+- Release v1.0.0: https://github.com/matheussiqueirahub/rpg_game_aria/releases/tag/v1.0.0
+- ZIP leve (< 10 MB): link direto para download
+  - https://github.com/matheussiqueirahub/rpg_game_aria/releases/download/v1.0.0/Aria_Package_Lite.zip
 
-Execução
-- `python -m Aria.main`
+Rodar pelo código (desenvolvimento)
+- Requisitos: Python 3.9+
+- Passos:
+  - (Opcional) criar venv: `python -m venv .venv && ./.venv/Scripts/Activate.ps1`
+  - Executar: `python -m Aria.main`
 
-Empacotamento (Windows)
-- Instale: `pip install -r requirements-dev.txt` (ou `pip install pyinstaller`)
-- Build: `pwsh Aria/build.ps1 -NoConsole` → gera `dist/Aria.exe`
-- Zip final: `pwsh Aria/package.ps1` → gera `Aria_Package.zip` com TODO o projeto (código + executável + docs).
+Como funciona (por cima)
+- `Aria/main.py`:1 controla janelas (login/cadastro/personalização), tema e sessão.
+- `Aria/database.py`:1 cria e acessa o SQLite local (`Aria/aria.db`) e aplica a migração leve.
+- `Aria/security.py`:1 faz hash/verificação de senhas com PBKDF2 (200k iterações + salt).
+- `Aria/ui/*`:1 telas e utilitários (tema, toast, tooltip).
 
-Banco de Dados
-- SQLite local em `Aria/aria.db`.
-- Tabelas: `users` (unique username, hash, tentativas/bloqueio) e `characters` (1–1 com usuário).
-- Migração leve automática: adiciona colunas de segurança se necessário.
-
-Segurança
+Segurança em foco
 - Hash PBKDF2 (SHA‑256, 200.000 iterações) com salt aleatório por senha.
-- Consultas parametrizadas para evitar injeção.
-- Bloqueio temporário após N tentativas (padrão: 5 falhas → 15 min).
-- Política de senha: mínimo 8 caracteres, exige maiúscula, minúscula e número.
+- Consultas parametrizadas (evita injeção SQL).
+- Lockout: 5 tentativas erradas → bloqueio por 15 minutos.
+- Política de senha: mínimo 8 caracteres, com maiúscula, minúscula e número.
 
-Qualidade e Organização
-- Código modular e padronizado (nomes claros, separação por camadas).
-- UI com foco em clareza, mensagens diretas e feedback sutis (toasts).
-- Scripts de build/empacote incluídos.
+Banco de dados
+- SQLite local (`Aria/aria.db`), fácil de backup (copie o arquivo).
+- Tabelas:
+  - `users`: usuário único, hash de senha, tentativas e bloqueio.
+  - `characters`: ficha 1–1 por usuário.
+
+Atalhos úteis
+- Ctrl+S: salvar personagem
+- Enter: submeter (login/cadastro)
+- Esc: sair (personalização) / limpar (login) / voltar (cadastro)
+
+Empacotamento
+- Build do executável: `pwsh Aria/build.ps1 -NoConsole`
+- ZIP completo (código + exe + docs): `pwsh Aria/package.ps1`
+- ZIP leve (<10 MB, só exe + README + LICENSE): `pwsh Aria/package-lite.ps1`
 
 Licença
-- MIT (ver arquivo `LICENSE`).
+- MIT — veja `LICENSE`:1
 
-Publicação no GitHub (sugestão)
-1. Garanta que apenas os diretórios/arquivos do projeto Aria estejam versionados.
-2. Adicione `.gitignore` (Python + PyInstaller) para evitar `dist/`, `build/`, `__pycache__/`, etc.
-3. Commits curtos e objetivos (ex.: "feat(ui): tema claro/escuro", "feat(auth): lockout por tentativas").
-4. Crie uma Release com o `Aria_Package.zip` anexado.
-5. Descreva a release com highlights, requisitos e instruções de execução.
-
-Nota de transparência
-- Este repositório contém apenas a implementação e documentação técnica do aplicativo. Evite incluir declarações enganosas sobre o processo de desenvolvimento.
+Links úteis (Release)
+- ZIP completo: https://github.com/matheussiqueirahub/rpg_game_aria/releases/download/v1.0.0/Aria_Package.zip
+- ZIP leve (<10 MB): https://github.com/matheussiqueirahub/rpg_game_aria/releases/download/v1.0.0/Aria_Package_Lite.zip
