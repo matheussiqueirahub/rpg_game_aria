@@ -63,3 +63,34 @@ Licença
 Links úteis (Release)
 - ZIP completo: https://github.com/matheussiqueirahub/rpg_game_aria/releases/download/v1.0.0/Aria_Package.zip
 - ZIP leve (<10 MB): https://github.com/matheussiqueirahub/rpg_game_aria/releases/download/v1.0.0/Aria_Package_Lite.zip
+ 
+FAQ rápido
+- Esqueci a senha. Como recupero?
+  - As senhas são armazenadas com hash; não é possível recuperar. Crie um novo usuário ou, em ambiente de teste, apague o arquivo do banco (`Aria/aria.db`).
+- Minha conta ficou bloqueada. E agora?
+  - O bloqueio expira em 15 minutos. Para desbloquear imediatamente em ambiente local, rode no SQLite: `UPDATE users SET failed_attempts=0, locked_until=NULL WHERE username='seu_usuario';`.
+- Onde ficam os dados?
+  - Em `Aria/aria.db`. Para backup, basta copiar esse arquivo.
+- Dá para rodar no macOS/Linux?
+  - Sim. Use `python3 -m Aria.main`. Se o Tk não estiver disponível, instale: `sudo apt install python3-tk` (Debian/Ubuntu) ou `brew install tcl-tk` (macOS).
+
+Solução de problemas
+- Windows SmartScreen bloqueou o executável
+  - Clique em “Mais informações” → “Executar assim mesmo”.
+- Erro “tkinter não encontrado”
+  - Instale o Tk da sua distro (veja FAQ acima). Em Windows, o instalador oficial do Python já inclui Tk.
+- “database is locked” ao abrir múltiplas instâncias
+  - Evite abrir mais de uma janela do app sobre o mesmo `aria.db`. Feche as janelas e tente novamente.
+- EXE muito grande
+  - Use o pacote “Lite” (<10 MB) ou gere localmente com UPX (o build já tenta baixar e usar automaticamente).
+
+Roadmap curto
+- Múltiplos personagens por usuário (slots).
+- Exportar/importar ficha do personagem (JSON/ZIP).
+- Sincronização opcional via MySQL/servidor.
+- Testes automatizados (unidade/integrados) e CI.
+- Acessibilidade: navegação por teclado e ARIA refinada.
+
+Limitações conhecidas
+- SQLite local é adequado para uso single‑user; múltiplas instâncias simultâneas podem bloquear o arquivo.
+- Troca de senha/recuperação não está implementada (escopo atual).
